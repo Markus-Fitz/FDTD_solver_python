@@ -68,8 +68,8 @@ def update_Bz(fields):
 		
 def update_Ex(fields):
     for i in range(fields.nx):
-        for j in range(1, fields.ny-1):
-            for k in range(1, fields.nz-1):
+        for j in range(1, fields.ny):
+            for k in range(1, fields.nz):
                 # NOTE: Only the inner edges can be evaluated!
                 # Calculation is shifted half an index in negative y- and z-dir!
                 E_x_new = fields.Ex[i, j, k] + (dt/(mu0*eps0))*((fields.By[i, j, k] - fields.By[i, j, k-1])/fields.dz - (fields.Bz[i, j, k] - fields.Bz[i, j-1, k])/fields.dy)# - (dt/eps0)*J_x[i, j, k]
@@ -77,9 +77,9 @@ def update_Ex(fields):
                 fields.Ex[i, j, k] = E_x_new
 		
 def update_Ey(fields):
-    for i in range(1, fields.nx-1):
+    for i in range(1, fields.nx):
         for j in range(fields.ny):
-            for k in range(1, fields.nz-1):
+            for k in range(1, fields.nz):
                 # NOTE: Only the inner edges can be evaluated!
                 # Calculation is shifted half an index in negative x- and z-dir!
                 E_y_new = fields.Ey[i, j, k] + (dt/(mu0*eps0))*((fields.Bz[i, j, k] - fields.Bz[i-1, j, k])/fields.dx - (fields.Bx[i, j, k] - fields.Bx[i, j, k-1])/fields.dz)# - (dt/eps0)*J_y[i, j, k]
@@ -87,8 +87,8 @@ def update_Ey(fields):
                 fields.Ey[i, j, k] = E_y_new
 		
 def update_Ez(fields):
-    for i in range(1, fields.nx-1):
-        for j in range(1, fields.ny-1):
+    for i in range(1, fields.nx):
+        for j in range(1, fields.ny):
             for k in range(fields.nz):
                 # NOTE: Only the inner edges can be evaluated!
                 # Calculation is shifted half an index in negative x- and y-dir!
@@ -135,12 +135,7 @@ def calc_Bz_exp(fields):
             for k in range(fields.nz):
                 fields.Bz_exp[i, j, k] = (fields.Bz[i, j, k] + fields.Bz[i, j, k+1])/2.0
 
-for t in range(tsteps):
-
-    update_Ex(fields)
-    update_Ey(fields)
-    update_Ez(fields)
-
+def apply_BCs_E(fields):
     # BCs for Ex fields
     # Ex BCs for z = 0 and z = nz+1
     for i in range(fields.nx):
@@ -180,35 +175,49 @@ for t in range(tsteps):
             fields.Ez[0, j, k] = fields.Ez[1, j, k]
             fields.Ez[fields.nx, j, k] = fields.Ez[fields.nx-1, j, k]
 
-    # interpolation of Ex, Ey and Ez values for Paraview export
-    calc_Ex_exp(fields)
-    calc_Ey_exp(fields)
-    calc_Ez_exp(fields)
-
-    # Ey-source in the middle of the domain
-    fields.Ey[10, 10, 10] = 1.0*np.sin(2*np.pi*1000000000*dt*t)
-
-    update_Bx(fields)
-    update_By(fields)
-    update_Bz(fields)
-
-        # BCs for Bx
+def apply_BCs_B(fields):
+    # BCs for Bx
     for j in range(fields.ny):
         for k in range(fields.nz):
             fields.Bx[0, j, k] = fields.Bx[1, j, k]
-            fields.Bx[fields.nx-1, j, k] = fields.Bx[fields.nx-2, j, k]
+            fields.Bx[fields.nx, j, k] = fields.Bx[fields.nx-1, j, k]
 
     # BCs for By
     for i in range(fields.nx):
         for k in range(fields.nz):
             fields.By[i, 0, k] = fields.By[i, 1, k]
-            fields.By[i, fields.ny-1, k] = fields.By[i, fields.ny-2, k]
+            fields.By[i, fields.ny, k] = fields.By[i, fields.ny-1, k]
 
     # BCs for Bz
     for i in range(fields.nx):
-        for j in range(fields.nz):
+        for j in range(fields.ny):
             fields.Bz[i, j, 0] = fields.Bz[i, j, 1]
-            fields.Bz[i, j, fields.nz-1] = fields.Bz[i, j, fields.nz-2]
+            fields.Bz[i, j, fields.nz] = fields.Bz[i, j, fields.nz-1]
+
+for t in range(tsteps):
+
+    # Ey-source in the middle of the domain
+    fields.Ey[10, 10, 10] = 1.0*np.sin(2*np.pi*1000000000*dt*t)
+    fields.Ey[11, 10, 10] = 1.0*np.sin(2*np.pi*1000000000*dt*t)
+    fields.Ey[10, 10, 11] = 1.0*np.sin(2*np.pi*1000000000*dt*t)
+    fields.Ey[11, 10, 11] = 1.0*np.sin(2*np.pi*1000000000*dt*t)
+
+    update_Ex(fields)
+    update_Ey(fields)
+    update_Ez(fields)
+
+    apply_BCs_E(fields)
+
+    # interpolation of Ex, Ey and Ez values for Paraview export
+    calc_Ex_exp(fields)
+    calc_Ey_exp(fields)
+    calc_Ez_exp(fields)
+
+    update_Bx(fields)
+    update_By(fields)
+    update_Bz(fields)
+
+    # apply_BCs_B(fields)
 
     # interpolation of Bx, By and Bz values for Paraview export
     calc_Bx_exp(fields)
