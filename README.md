@@ -4,6 +4,16 @@ This project's aim is to create a simple and light-weight numerical solver for M
 
 This solver is an educational project first, which preferres explicit expression over elegance and performance. It will be optimized as much as it can be in this context, though other implementations in different languages may follow for that.
 
+The default case is an electric field-source in the bottom-left-front corner of a domain which is 25cm x 25cm x 25cm in size. The source radiates at 1V/m field strength with a frequency of 1 GHz.
+
+The following images show the evolution of the fields after 100, 200, 300, 400 and 500 timesteps.
+
+<img width="621" height="623" alt="Screenshot From 2026-02-14 16-10-37" src="https://github.com/user-attachments/assets/3608f08c-7cb0-486d-89f7-63c81ed38e97" />
+<img width="621" height="623" alt="Screenshot From 2026-02-14 16-10-26" src="https://github.com/user-attachments/assets/16694bbb-8970-46ea-99e0-cd2ff42e1c3d" />
+<img width="621" height="623" alt="Screenshot From 2026-02-14 16-10-11" src="https://github.com/user-attachments/assets/0d2bc6fb-fd3e-448e-b018-4a69ffc93406" />
+<img width="621" height="623" alt="Screenshot From 2026-02-14 16-09-57" src="https://github.com/user-attachments/assets/08a83bf6-8b1b-424f-aa77-a8e5e319bd60" />
+<img width="621" height="623" alt="Screenshot From 2026-02-14 16-09-44" src="https://github.com/user-attachments/assets/e32c8225-8418-45ee-9bb9-dd6482374a4c" />
+
 ## Maxwell's equations
 
 $$
@@ -273,9 +283,7 @@ for i in range(n_x):
 			E_x[i, j, k] = E_x_new
 ```
 
-.
-
-The update equation for the $E_y$ field is:
+.The update equation for the $E_y$ field is:
 
 ``` python
 
@@ -288,9 +296,7 @@ for i in range(1, n_x-1):
 			E_y[i, j, k] = E_y_new
 ```
 
-.
-
-And finally, the update equation for the $E_z$ field is:
+. And finally, the update equation for the $E_z$ field is:
 
 ``` python
 
