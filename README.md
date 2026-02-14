@@ -8,11 +8,11 @@ The default case is an electric field-source in the bottom-left-front corner of 
 
 The following images show the evolution of the fields after 100, 200, 300, 400 and 500 timesteps.
 
-<img width="621" height="623" alt="Screenshot From 2026-02-14 16-10-37" src="https://github.com/user-attachments/assets/3608f08c-7cb0-486d-89f7-63c81ed38e97" />
-<img width="621" height="623" alt="Screenshot From 2026-02-14 16-10-26" src="https://github.com/user-attachments/assets/16694bbb-8970-46ea-99e0-cd2ff42e1c3d" />
-<img width="621" height="623" alt="Screenshot From 2026-02-14 16-10-11" src="https://github.com/user-attachments/assets/0d2bc6fb-fd3e-448e-b018-4a69ffc93406" />
-<img width="621" height="623" alt="Screenshot From 2026-02-14 16-09-57" src="https://github.com/user-attachments/assets/08a83bf6-8b1b-424f-aa77-a8e5e319bd60" />
 <img width="621" height="623" alt="Screenshot From 2026-02-14 16-09-44" src="https://github.com/user-attachments/assets/e32c8225-8418-45ee-9bb9-dd6482374a4c" />
+<img width="621" height="623" alt="Screenshot From 2026-02-14 16-09-57" src="https://github.com/user-attachments/assets/08a83bf6-8b1b-424f-aa77-a8e5e319bd60" />
+<img width="621" height="623" alt="Screenshot From 2026-02-14 16-10-11" src="https://github.com/user-attachments/assets/0d2bc6fb-fd3e-448e-b018-4a69ffc93406" />
+<img width="621" height="623" alt="Screenshot From 2026-02-14 16-10-26" src="https://github.com/user-attachments/assets/16694bbb-8970-46ea-99e0-cd2ff42e1c3d" />
+<img width="621" height="623" alt="Screenshot From 2026-02-14 16-10-37" src="https://github.com/user-attachments/assets/3608f08c-7cb0-486d-89f7-63c81ed38e97" />
 
 ## Maxwell's equations
 
