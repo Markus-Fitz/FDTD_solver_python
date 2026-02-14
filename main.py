@@ -140,40 +140,40 @@ def apply_BCs_E(fields):
     # Ex BCs for z = 0 and z = nz+1
     for i in range(fields.nx):
         for j in range(fields.ny+1):
-            fields.Ex[i, j, 0] = fields.Ex[i, j, 1]
-            fields.Ex[i, j, fields.nz] = fields.Ex[i, j, fields.nz-1]
+            fields.Ex[i, j, 0] = 0.0 #fields.Ex[i, j, 1]
+            fields.Ex[i, j, fields.nz] = 0.0 #fields.Ex[i, j, fields.nz-1]
 
     # Ex BCs for y = 0 and y = ny+1
     for i in range(fields.nx):
         for k in range(fields.nz+1):
-            fields.Ex[i, 0, k] = fields.Ex[i, 1, k]
-            fields.Ex[i, fields.ny, k] = fields.Ex[i, fields.ny-1, k]
+            fields.Ex[i, 0, k] = 0.0 #fields.Ex[i, 1, k]
+            fields.Ex[i, fields.ny, k] = 0.0 #fields.Ex[i, fields.ny-1, k]
 
     # BCs for Ey fields
     # Ey BCs for z = 0 and z = nz+1
     for i in range(fields.nx+1):
         for j in range(fields.ny):
-            fields.Ey[i, j, 0] = fields.Ey[i, j, 1]
-            fields.Ey[i, j, fields.nz] = fields.Ey[i, j, fields.nz-1]
+            fields.Ey[i, j, 0] = 0.0 #fields.Ey[i, j, 1]
+            fields.Ey[i, j, fields.nz] = 0.0 #fields.Ey[i, j, fields.nz-1]
 
     # Ey BCs for x = 0 and x = nx+1
     for j in range(fields.ny):
         for k in range(fields.nz+1):
-            fields.Ey[0, j, k] = fields.Ey[1, j, k]
-            fields.Ey[fields.nx, j, k] = fields.Ey[fields.nx-1, j, k]
+            fields.Ey[0, j, k] = 0.0 #fields.Ey[1, j, k]
+            fields.Ey[fields.nx, j, k] = 0.0 #fields.Ey[fields.nx-1, j, k]
 
     # BCs for Ez fields
     # Ez BCs for y = 0 and y = ny+1
     for i in range(fields.nx+1):
         for k in range(fields.nz):
-            fields.Ez[i, 0, k] = fields.Ez[i, 1, k]
-            fields.Ez[i, fields.ny, k] = fields.Ez[i, fields.ny-1, k]
+            fields.Ez[i, 0, k] = 0.0 #fields.Ez[i, 1, k]
+            fields.Ez[i, fields.ny, k] = 0.0 #fields.Ez[i, fields.ny-1, k]
 
     # Ez BCs for x = 0 and x = nx+1
     for j in range(fields.ny+1):
         for k in range(fields.nz):
-            fields.Ez[0, j, k] = fields.Ez[1, j, k]
-            fields.Ez[fields.nx, j, k] = fields.Ez[fields.nx-1, j, k]
+            fields.Ez[0, j, k] = 0.0 #fields.Ez[1, j, k]
+            fields.Ez[fields.nx, j, k] = 0.0 #fields.Ez[fields.nx-1, j, k]
 
 def apply_BCs_B(fields):
     # BCs for Bx
