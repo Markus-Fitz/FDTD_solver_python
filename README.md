@@ -32,10 +32,13 @@ The magnetic fields are stored in the middle of each cell face. The magnetic fie
 The functions specifying the time-evolution for the electric and magnetic field components require the evaluation of the cross-product of both the electric and the magnetic fields.
 
 To come up with the discretized partial differential equations, the curl of a vector field
+
 $$
 \nabla \times A
 $$
+
 can first be expressed in three separate equations
+
 $$
 (\nabla \times A)_x = \frac{\partial A_y}{\partial z} - \frac{\partial A_z}{\partial y}
 $$
@@ -45,7 +48,9 @@ $$
 $$
 (\nabla \times A)_z = \frac{\partial A_x}{\partial y} - \frac{\partial A_y}{\partial x}
 $$
+
 . Each partial differential acting on a field $F$ at a point specified by the index i, j, and k for the three spacial directions (from now on noted as a superscript on the corresponding field) can be expressed by the approximations
+
 $$
 \frac{\partial F}{\partial x} |_{i, j, k} \approx \frac{F^{i+\frac{1}{2}, j, k} - F^{i-\frac{1}{2}, j, k}}{\Delta x}
 $$
@@ -55,9 +60,11 @@ $$
 $$
 \frac{\partial F}{\partial x} |_{i, j, k} \approx \frac{F^{i, j, k+\frac{1}{2}} - F^{i, j, k-\frac{1}{2}}}{\Delta z}
 $$
+
 , where the $\Delta x$, $\Delta y$ and $\Delta z$ describe the length of the cells in each direction (which is equal to the distance in between each field quantity).
 
 With this approximation, the cross product of the curl operator acting on a vector field can be expressed as
+
 $$
 (\nabla \times A)_x^{i, j, k} \approx \frac{A_y^{i, j, k+\frac{1}{2}} - A_y^{i, j, k-\frac{1}{2}}}{\Delta z} - \frac{A_z^{i, j+\frac{1}{2}, k} - A_z^{i, j-\frac{1}{2}, k}}{\Delta y}
 $$
@@ -67,22 +74,29 @@ $$
 $$
 (\nabla \times A)_z^{i, j, k} \approx \frac{A_x^{i, j+\frac{1}{2}, k} - A_x^{i, j-\frac{1}{2}, k}}{\Delta y} - \frac{A_y^{i+\frac{1}{2}, j, k} - A_y^{i-\frac{1}{2}, j, k}}{\Delta x}
 $$
+
 . The nature of the staggered Yee grid is very convenient for evaluating these approximations to the partial differential equations. As is seen in the approximations above, the field values shifted by half a cell distance is needed to evaluate the central differences. This fits perfectly with the staggered grid proposed by Yee in his paper "Numerical Solution of Initial Boundary Value Problems Involving Maxwell's Equations in Isotropic Media". The values of $E_x$, $E_y$, $E_z$ as well as $B_x$, $B_y$ and $B_z$ are placed in such a way that the central difference scheme described above comes naturally.
+
 ## Time evolution of fields
 
 Assuming that the initial fields adhere to all four equations, the induction law of Faraday (equation nr. 3) and Ampère's law (equation nr. 4) describe the time-evolution of both the electric and magnetic fields. The time-step becomes relevant now, and is noted by the time-index $n$, used to describe the $n$-th timestep $t_n$.
 
 The time-derivative $\frac{1}{\partial t}$ can be approximated in a similar way to the spacial derivatives. For a field $F(t)$, the approximation
+
 $$
 \frac{\partial F}{\partial t} \approx \frac{F(t_{n+1}) - F(t_n)}{\Delta t}
 $$
+
 is used, with $\Delta t$ being one time-step in the discretized time domain.
 
 With this approximation, the Induction law of Faraday,
+
 $$
 \nabla \times E = - \frac{\partial B}{\partial t}
 $$
+
 , can be rewritten as the three equations
+
 $$
 \frac{E_y^{i, j, k+\frac{1}{2}} - E_y^{i, j, k-\frac{1}{2}}}{\Delta z} - \frac{E_z^{i, j+\frac{1}{2}, k} - E_z^{i, j-\frac{1}{2}, k}}{\Delta y} = - \frac{B_x^{i, j, k}(t_{n+1}) - B_x^{i, j, k}(t_n)}{\Delta t}
 $$
@@ -92,7 +106,9 @@ $$
 $$
 \frac{E_x^{i, j+\frac{1}{2}, k} - E_x^{i, j-\frac{1}{2}, k}}{\Delta y} - \frac{E_y^{i+\frac{1}{2}, j, k} - E_y^{i-\frac{1}{2}, j, k}}{\Delta x} = - \frac{B_z^{i, j, k}(t_{n+1}) - B_z^{i, j, k}(t_n)}{\Delta t}
 $$
+
 . This directly leads to an expression for the three vector fields $B_x$, $B_y$ and $B_z$ at the time-step $t_{n+1}$, based only on information we have at time-step $t_n$. The following three equations therefore are our update-equations for the B-field at the next timestep
+
 $$
 B_x^{i, j, k}(t_{n+1}) = B_z^{i, j, k}(t_n) - \Delta t \left( \frac{E_y^{i, j, k+\frac{1}{2}} - E_y^{i, j, k-\frac{1}{2}}}{\Delta z} - \frac{E_z^{i, j+\frac{1}{2}, k} - E_z^{i, j-\frac{1}{2}, k}}{\Delta y} \right)
 $$
@@ -102,7 +118,9 @@ $$
 $$
 B_z^{i, j, k}(t_{n+1}) = B_z^{i, j, k}(t_n) - \Delta t \left( \frac{E_x^{i, j+\frac{1}{2}, k} - E_x^{i, j-\frac{1}{2}, k}}{\Delta y} - \frac{E_y^{i+\frac{1}{2}, j, k} - E_y^{i-\frac{1}{2}, j, k}}{\Delta x} \right)
 $$
+
 . Similarly, Ampère's law can be approximated in the following three equations
+
 $$
 \frac{B_y^{i, j, k+\frac{1}{2}} - B_y^{i, j, k-\frac{1}{2}}}{\Delta z} - \frac{B_z^{i, j+\frac{1}{2}, k} - B_z^{i, j-\frac{1}{2}, k}}{\Delta y} = \mu_0 \left( J_x^{i, j, k} + \epsilon_0 \frac{E_x^{i, j, k}(t_{n+1}) - E_x^{i, j, k}(t_n)}{\Delta t} \right)
 $$
@@ -112,7 +130,9 @@ $$
 $$
 \frac{B_x^{i, j+\frac{1}{2}, k} - B_x^{i, j-\frac{1}{2}, k}}{\Delta y} - \frac{B_y^{i+\frac{1}{2}, j, k} - B_y^{i-\frac{1}{2}, j, k}}{\Delta x} = \mu_0 \left( J_z^{i, j, k} + \epsilon_0 \frac{E_z^{i, j, k}(t_{n+1}) - E_z^{i, j, k}(t_n)}{\Delta t} \right)
 $$
+
 , leading to the update equations for the E-fields
+
 $$
 E_x^{i, j, k}(t_{n+1}) = E_x^{i, j, k}(t_n) + \frac{\Delta t}{\epsilon_0} \left( \frac{1}{\mu_0} \left( \frac{B_y^{i, j, k+\frac{1}{2}} - B_y^{i, j, k-\frac{1}{2}}}{\Delta z} - \frac{B_z^{i, j+\frac{1}{2}, k} - B_z^{i, j-\frac{1}{2}, k}}{\Delta y} \right) - J_x^{i, j, k} \right)
 $$
@@ -124,6 +144,7 @@ $$
 $$
 E_z^{i, j, k}(t_{n+1}) = E_z^{i, j, k}(t_n) +  \frac{\Delta t}{\epsilon_0} \left( \frac{1}{\mu_0} \left( \frac{B_x^{i, j+\frac{1}{2}, k} - B_x^{i, j-\frac{1}{2}, k}}{\Delta y} - \frac{B_y^{i+\frac{1}{2}, j, k} - B_y^{i-\frac{1}{2}, j, k}}{\Delta x} \right) - J_z^{i, j, k} \right)
 $$
+
 . The discretization and structure of the grid becomes important for the implementation, so that step is next.
 
 ## Yee grid and implementation
@@ -141,37 +162,47 @@ $E_x^{0, 0, 0}$ is shifted half a cell size in negative y-direction and half a c
 $$
 	E_x^{i, j-\frac{1}{2}, k-\frac{1}{2}}(t_{n+1}) = E_x^{i, j-\frac{1}{2}, k-\frac{1}{2}}(t_n) + \frac{\Delta t}{\epsilon_0 \mu_0} \left( \frac{B_y^{i, j-\frac{1}{2}, k} - B_y^{i, j-\frac{1}{2}, k-1}}{\Delta z} - \frac{B_z^{i, j, k-\frac{1}{2}} - B_z^{i, j-1, k-\frac{1}{2}}}{\Delta y} \right) - \frac{\Delta t}{\epsilon_0}J_x^{i, j-\frac{1}{2}, k-\frac{1}{2}}
 $$
+
 .
 
 $E_y^{0, 0, 0}$ is shifted half a cell size in negative x-direction and half a cell-size in negative z-direction compared to the center of the cell denoted by the indices $(0, 0, 0)$. This modifies the update-equation for $E_y$ to:
+
 $$
 E_y^{i-\frac{1}{2}, j, k-\frac{1}{2}}(t_{n+1}) = E_y^{i-\frac{1}{2}, j, k-\frac{1}{2}}(t_n) + \frac{\Delta t}{\epsilon_0 \mu_0} \left( \frac{B_z^{i, j, k-\frac{1}{2}} - B_z^{i-1, j, k-\frac{1}{2}}}{\Delta x} - \frac{B_x^{i-\frac{1}{2}, j, k} - B_x^{i-\frac{1}{2}, j, k-1}}{\Delta z} \right) - \frac{\Delta t}{\epsilon_0} J_y^{i-\frac{1}{2}, j, k-\frac{1}{2}}
 $$
+
 .
 
 $E_z^{0, 0, 0}$ is shifted half a cell size in negative x-direction and half a cell-size in negative y-direction compared to the center of the cell denoted by the indices $(0, 0, 0)$. This modifies the update-equation for $E_z$ to:
+
 $$
 E_z^{i-\frac{1}{2}, j-\frac{1}{2}, k}(t_{n+1}) = E_z^{i-\frac{1}{2}, j-\frac{1}{2}, k}(t_n) +  \frac{\Delta t}{\epsilon_0 \mu_0} \left( \frac{B_x^{i-\frac{1}{2}, j, k} - B_x^{i-\frac{1}{2}, j-1, k}}{\Delta y} - \frac{B_y^{i, j-\frac{1}{2}, k} - B_y^{i-1, j-\frac{1}{2}, k}}{\Delta x} \right) - \frac{\Delta t}{\epsilon_0}J_z^{i-\frac{1}{2}, j-\frac{1}{2}, k}
 $$
 
-Note in the adjusted equations, that the current J is defined at the edges parallel to its direction - at the same points as the electric fields in the same direction.
+. Note in the adjusted equations, that the current J is defined at the edges parallel to its direction - at the same points as the electric fields in the same direction.
 
 $B_x^{0, 0, 0}$ is shifted half a cell size in negative x-direction compared to the center of the cell denoted by the indices $(0, 0, 0)$. This modifies the update-equation for $B_x$ to:
+
 $$
 B_x^{i-\frac{1}{2}, j, k}(t_{n+1}) = B_x^{i-\frac{1}{2}, j, k}(t_n) - \Delta t \left( \frac{E_y^{i-\frac{1}{2}, j, k+\frac{1}{2}} - E_y^{i-\frac{1}{2}, j, k-\frac{1}{2}}}{\Delta z} - \frac{E_z^{i-\frac{1}{2}, j+\frac{1}{2}, k} - E_z^{i-\frac{1}{2}, j-\frac{1}{2}, k}}{\Delta y} \right)
 $$
+
 .
 
 $B_y^{0, 0, 0}$ is shifted half a cell size in negative y-direction compared to the center of the cell denoted by the indices $(0, 0, 0)$. This modifies the update equation for $B_y$ to:
+
 $$
 B_y^{i, j-\frac{1}{2}, k}(t_{n+1}) = B_y^{i, j-\frac{1}{2}, k}(t_n) - \Delta t \left( \frac{E_z^{i+\frac{1}{2}, j-\frac{1}{2}, k} - E_z^{i-\frac{1}{2}, j-\frac{1}{2}, k}}{\Delta x} - \frac{E_x^{i, j-\frac{1}{2}, k+\frac{1}{2}} - E_x^{i, j-\frac{1}{2}, k-\frac{1}{2}}}{\Delta z} \right)
 $$
+
 .
 
 $B_z^{0, 0, 0}$ is shifted half a cell size in negative z-direction compared to the center of the cell denoted by the indices $(0, 0, 0)$. This modifies the update equation for $B_z$ to:
+
 $$
 B_z^{i, j, k-\frac{1}{2}}(t_{n+1}) = B_z^{i, j, k-\frac{1}{2}}(t_n) - \Delta t \left( \frac{E_x^{i, j+\frac{1}{2}, k-\frac{1}{2}} - E_x^{i, j-\frac{1}{2}, k-\frac{1}{2}}}{\Delta y} - \frac{E_y^{i+\frac{1}{2}, j, k-\frac{1}{2}} - E_y^{i-\frac{1}{2}, j, k-\frac{1}{2}}}{\Delta x} \right)
 $$
+
 .
 At this point the Yee-grid seems very convenient, as the values in the equations above are directly accessible without averaging values over multiple cells etc. They can be directly calculated from values in the stored arrays.
 
@@ -241,6 +272,7 @@ for i in range(n_x):
 			E_x_new = E_x[i, j, k] + (dt/(mu0*eps0))*((B_y[i, j, k] - B_y[i, j, k-1])/dz - (B_z[i, j, k] - B_z[i, j-1, k])/dy) - (dt/eps0)*J_x[i, j, k]
 			E_x[i, j, k] = E_x_new
 ```
+
 .
 
 The update equation for the $E_y$ field is:
@@ -255,6 +287,7 @@ for i in range(1, n_x-1):
 			E_y_new = E_y[i, j, k] + (dt/(mu0*eps0))*((B_z[i, j, k] - B_z[i-1, j, k])/dx - (B_x[i, j, k] - B_x[i, j, k-1])/dz) - (dt/eps0)*J_y[i, j, k]
 			E_y[i, j, k] = E_y_new
 ```
+
 .
 
 And finally, the update equation for the $E_z$ field is:
@@ -269,4 +302,5 @@ for i in range(1, n_x-1):
 			E_z_new = E_z[i, j, k] + (dt/(mu0*eps0))*((B_x[i, j, k] - B_x[i, j-1, k])/dy - (B_y[i, j, k] - B_y[i-1, j, k])/dx) - (dt/eps0)*J_z[i, j, k]
 			E_z[i, j, k] = E_z_new
 ```
+
 .
