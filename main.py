@@ -1,3 +1,5 @@
+import os.path
+
 try:
     import cupy as np
 except ImportError:
@@ -7,6 +9,8 @@ except ImportError:
 from grid import Grid
 from field import Field
 from vtk_export import export_data
+
+
 
 # define domain
 domain = Grid(51, 51, 51, 0.005) # domain size is 25cm x 25cm x 25cm
@@ -223,7 +227,7 @@ for t in range(tsteps):
     calc_Bx_exp(fields)
     calc_By_exp(fields)
     calc_Bz_exp(fields)
-
-    filename = "timestep " + str(t)
+    
+    filename = "timestep-" + str(t)
 
     export_data(fields, domain, filename)

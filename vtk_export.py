@@ -1,6 +1,12 @@
 from pyevtk.hl import imageToVTK
+import os.path
+from pyvista import examples
 
-def export_data(field, grid, path):
+# define export path
+export_folder = "./output"
+
+
+def export_data(field, grid, frame_id):
 
     d = grid.d
     Ex = field.Ex_exp
@@ -10,9 +16,11 @@ def export_data(field, grid, path):
     Bx = field.Bx_exp
     By = field.By_exp
     Bz = field.Bz_exp
-
+    
+    frame_path = os.path.join(export_folder, frame_id)
+    
     imageToVTK(
-        str("output/" + path),
+        frame_path,
         spacing = (d,d,d),
         pointData = {
             "E_x": Ex,
