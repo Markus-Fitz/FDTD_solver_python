@@ -9,31 +9,42 @@ from field import Field
 from vtk_export import export_data
 
 # define domain
-domain = Grid(51, 51, 51, 0.005) # domain size is 25cm x 25cm x 25cm
+domain = Grid(24, 12, 24, 0.005) # domain size is 12cm x 6cm x 12cm
 fields = Field(domain)
 
 # define global parameters
 #vacuum permittivity
-eps0 = 8.8542*10e-12
+eps0 = 8.8542e-12
 
 #vacuum permeability
-mu0 = 1.2566*10e-6
+mu0 = 1.2566e-6
 
-#end-time of simulation in seconds
+#light speed in simulation - change for maximum light speed in simulated domain!
+c_max = 1/np.sqrt(eps0*mu0)
+
+print(c_max)
+
+#end-time of simulation in seconds - 10ns
 tend = 0.00000001
 
-#desired courant number, has to be lower than one
-C = 0.1
+#time-step size
+dt = 5e-12
 
 #calculation of timestep from courant number
-dt = C*domain.d*np.sqrt(eps0*mu0)
+C = dt*c_max / domain.d
+
+# TODO: assert error if courant number is larger than
+#max. desired courant number, has to be lower than one
+# C_limit = 0.1
 
 #timesteps
 tsteps = int(np.floor(tend/dt))
 
 print("dt is set to ", dt, ". The number of timesteps is ", tsteps)
 
-print("periods of source simulated:", tend * 1000000000)
+print("Courant number is ", C, ".")
+
+#print("periods of source simulated:", tend * 1000000000)
 
 # definition of update functions
 def update_Bx(fields):
@@ -196,7 +207,9 @@ def apply_BCs_B(fields):
 
 for t in range(tsteps):
 
-    # Ey-source in the middle of the domain
+    print("Simulating timestep", t)
+
+    # Ey-source in the middle of the domain; f=1.0GHz
     fields.Ey[10, 10, 10] = 1.0*np.sin(2*np.pi*1000000000*dt*t)
     fields.Ey[11, 10, 10] = 1.0*np.sin(2*np.pi*1000000000*dt*t)
     fields.Ey[10, 10, 11] = 1.0*np.sin(2*np.pi*1000000000*dt*t)
